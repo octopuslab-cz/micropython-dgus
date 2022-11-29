@@ -23,25 +23,24 @@ class DGUS:
             raise NotImplementedError()
 
 
-
     def read_vp(self, address, length = 1):
         # Flush RX buffer
         self._uart.read()
 
-        self._uart.write(pack('>HBBHB', HEADER, 4, READ_VP, address, length))
+        self._uart.write(pack('>HBBHB', self.HEADER, 4, self.READ_VP, address, length))
         while not self._uart.any():
             pass
 
         data = self._uart.read()
         rh, rlen, rcmd, raddr, rdlen = unpack('>HBBHB', data[0:7])
 
-        if rh != HEADER:
+        if rh != self.HEADER:
             raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, HEADER))
 
         if rlen != len(data) - 3:
             raise Exception("Malformed reply, length does not match")
 
-        if rcmd != READ_VP:
+        if rcmd != self.READ_VP:
             raise Exception("Malformed reply, bad reply command")
 
         if raddr != address:
@@ -64,7 +63,7 @@ class DGUS:
         length += 3
 
 
-        self._uart.write(pack('>HBBH', HEADER, length, WRITE_VP, address))
+        self._uart.write(pack('>HBBH', self.HEADER, length, self.WRITE_VP, address))
         self._uart.write(data)
 
         while not self._uart.any():
@@ -73,13 +72,13 @@ class DGUS:
         data = self._uart.read()
         rh, rlen, rcmd = unpack('>HBB', data[0:4])
 
-        if rh != HEADER:
+        if rh != self.HEADER:
             raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, HEADER))
 
         if rlen != len(data) - 3:
             raise Exception("Malformed reply, length does not match")
 
-        if rcmd != WRITE_VP:
+        if rcmd != self.WRITE_VP:
             raise Exception("Malformed reply, bad reply command")
 
         return data[4:] == b'OK'
