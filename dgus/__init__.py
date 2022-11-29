@@ -23,6 +23,23 @@ class DGUS:
             raise NotImplementedError()
 
 
+    def _parse_dgus(self, payload):
+        rh, rlen, rcmd, raddr, rdlen = unpack('>HBBHB', payload[0:7])
+
+        if rh != self.HEADER:
+            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, HEADER))
+
+        if rlen != len(payload) - 3:
+            raise Exception("Malformed reply, length does not match")
+
+        response = dict()
+        response['command'] = rcmd
+        response['address'] = raddr
+        response['data'] = payload[7:]
+
+        return response
+
+
     def read_vp(self, address, length = 1):
         if length < 1 and length > 0x7c:
             raise Exception("Lenght out of range 1..124")
@@ -31,27 +48,21 @@ class DGUS:
         self._uart.read()
 
         self._uart.write(pack('>HBBHB', self.HEADER, 4, self.READ_VP, address, length))
+
         while not self._uart.any():
             pass
 
-        data = self._uart.read()
-        rh, rlen, rcmd, raddr, rdlen = unpack('>HBBHB', data[0:7])
+        payload = self._uart.read()
+        data = self._parse_dgus(payload)
 
-        if rh != self.HEADER:
-            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, HEADER))
-
-        if rlen != len(data) - 3:
-            raise Exception("Malformed reply, length does not match")
-
-        if rcmd != self.READ_VP:
+        if data['command'] != self.READ_VP:
             raise Exception("Malformed reply, bad reply command")
 
-        if raddr != address:
+        if data['address'] != address:
             raise Exception("Malformed reply, address does not match")
 
-        rdata = unpack('>{}H'.format(rdlen), data[7:])
+        return data['data']
 
-        return rdata
 
 
     def write_vp(self, address, data):
