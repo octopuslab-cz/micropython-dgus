@@ -24,6 +24,9 @@ class DGUS:
 
 
     def read_vp(self, address, length = 1):
+        if length < 1 and length > 0x7c:
+            raise Exception("Lenght out of range 1..124")
+
         # Flush RX buffer
         self._uart.read()
 
@@ -57,7 +60,7 @@ class DGUS:
 
         # pad data to be word
         if len(data) % 2 != 0:
-            data += b'\x00'
+            raise Exception("Data must dividable by 2 bytes")
 
         length = len(data)
         length += 3
