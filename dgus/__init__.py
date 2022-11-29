@@ -11,8 +11,22 @@ __author__ = "Petr Kracik"
 
 class Component:
     def __init__(self, dgus, address):
-        self._dgus = dgus
         self._addr = address
+        self._dgus = dgus
+        self._dgus.event_recv_add(self._on_recv)
+        self._on_change_events = list()
+
+
+    def _on_change(self, data):
+        print("Component {}({}) changed value to {}".format(self.__class__.__name__, self._addr, data))
+
+
+    def _on_recv(self, data):
+        # Not for us, so just let it be
+        if data['address'] != self.address:
+            return
+
+        self._on_change(data['data'])
 
 
     def __str__(self):
@@ -32,6 +46,14 @@ class Component:
     def value(self):
         raise NotImplementedError()
 
+    def event_on_change_add(self, function):
+        self._on_change_events.append(function)
+
+
+    def event_on_change_remove(self, function):
+        if function in self._on_change_events:
+            self._on_change_events.remove(function)
+
 
 class Int16(Component):
     @property
@@ -44,6 +66,12 @@ class Int16(Component):
         self._dgus.write_vp_int16(self._addr, value)
 
 
+    def _on_change(self, data):
+        val = unpack('>H', data)[0]
+        for f in self._on_change_events:
+            f(val)
+
+
 class DGUS:
     HEADER=0x5aa5
     WRITE_VP=0x82
@@ -54,6 +82,7 @@ class DGUS:
         self._uart = uart
         self._crc = crc
         self._on_recv_events = []
+        self._components = []
         if self._crc:
             raise NotImplementedError()
 
@@ -156,8 +185,9 @@ class DGUS:
         if not self._uart.any():
             return
         payload = self._uart.read()
+        data = self._parse_dgus(payload)
 
-        self._on_recv(self._parse_dgus(payload))
+        self._on_recv(data)
 
 
     def _on_recv(self, data):
