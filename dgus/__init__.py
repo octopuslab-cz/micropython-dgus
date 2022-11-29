@@ -9,6 +9,37 @@ __license__ = "MIT"
 __author__ = "Petr Kracik"
 
 
+class Component:
+    def __init__(self, dgus, address):
+        self._dgus = dgus
+        self._addr = address
+
+
+    def __str__(self):
+        return "{} at {}".format(self.__class__.__name__, self._addr)
+
+
+    @property
+    def address(self):
+        return self._addr
+
+
+    @property
+    def value(self):
+        raise NotImplementedError()
+
+
+class Int16(Component):
+    @property
+    def value(self):
+        return self._dgus.read_vp_int16(self._addr)
+
+
+    @value.setter
+    def value(self, value):
+        self._dgus.write_vp_int16(self._addr, value)
+
+
 class DGUS:
     HEADER=0x5aa5
     WRITE_VP=0x82
