@@ -16,7 +16,11 @@ class Component:
 
 
     def __str__(self):
-        return "{} at {}".format(self.__class__.__name__, self._addr)
+        return "{} at 0x{:02x}".format(self.__class__.__name__, self._addr)
+
+
+    def __repr__(self):
+        return self.__str__()
 
 
     @property
