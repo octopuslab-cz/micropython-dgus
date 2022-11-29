@@ -101,6 +101,9 @@ class DGUS:
     def loop(self):
         if not self._uart.any():
             return
+        payload = self._uart.read()
+
+        self._on_recv(self._parse_dgus(payload))
 
 
     def _on_recv(self, data):
