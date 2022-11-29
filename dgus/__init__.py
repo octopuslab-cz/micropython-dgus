@@ -18,7 +18,7 @@ class Component:
 
 
     def _on_change(self, data):
-        print("Component {}({}) changed value to {}".format(self.__class__.__name__, self._addr, data))
+        print("Component {}(0x{:02x}) changed value to {}".format(self.__class__.__name__, self._addr, data))
 
 
     def _on_recv(self, data):
@@ -69,7 +69,7 @@ class Int16(Component):
     def _on_change(self, data):
         val = unpack('>H', data)[0]
         for f in self._on_change_events:
-            f(val)
+            f(self, val)
 
 
 class DGUS:
