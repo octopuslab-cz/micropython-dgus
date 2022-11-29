@@ -76,6 +76,7 @@ class DGUS:
     HEADER=0x5aa5
     WRITE_VP=0x82
     READ_VP=0x83
+    PAGEID_REG=0x5a01
 
 
     def __init__(self, uart, crc=False):
@@ -179,6 +180,11 @@ class DGUS:
     def write_vp_int32(self, address, value):
         data = pack(">I", value)
         return self.write_vp(address, data)
+
+
+    def set_page(self, pageid):
+        payload = pack('>HH', self.PAGEID_REG, pageid)
+        self.write_vp(0x84, payload)
 
 
     def loop(self):
