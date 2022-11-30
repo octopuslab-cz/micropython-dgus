@@ -5,7 +5,8 @@ Example usage:
 ESP32:
 
 from machine import UART
-from dgus import DGUS, Int16
+from dgus import DGUS
+from dgus.components.int import Int16
 
 def component_value(val):
     print("Got data from component: {}".format(val))
