@@ -72,6 +72,24 @@ class Int16(Component):
             f(self, val)
 
 
+class String(Component):
+    @property
+    def value(self):
+        pass
+
+
+    @value.setter
+    def value(self, value):
+        val = value.encode()
+
+        if len(val) % 2 != 0:
+            val += b'\x00'
+
+        val += b'\xff\xff'
+
+        self._dgus.write_vp(self._addr, val)
+
+
 class DGUS:
     HEADER=0x5aa5
     WRITE_VP=0x82
