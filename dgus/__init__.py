@@ -110,7 +110,7 @@ class DGUS:
         rh, rlen, rcmd, raddr, rdlen = unpack('>HBBHB', payload[0:7])
 
         if rh != self.HEADER:
-            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, HEADER))
+            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, self.HEADER))
 
         if rlen != len(payload) - 3:
             raise Exception("Malformed reply, length does not match")
@@ -179,7 +179,7 @@ class DGUS:
         rh, rlen, rcmd = unpack('>HBB', data[0:4])
 
         if rh != self.HEADER:
-            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, HEADER))
+            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, self.HEADER))
 
         if rlen != len(data) - 3:
             raise Exception("Malformed reply, length does not match")
