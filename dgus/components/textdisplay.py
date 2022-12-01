@@ -7,7 +7,7 @@ from ..types.string import String
 
 
 class TextDisplay(Component):
-    SP_OFFSET_TEXT_LENGTH = 0x0
+    SP_OFFSET_TEXT_LENGTH = 0x08
 
 
     def __init__(self, dgus, sp_address):
