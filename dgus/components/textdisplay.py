@@ -2,13 +2,13 @@
 # Copyright (c) 2022 Petr Kracik
 # Copyright (c) 2022 OctopusLAB
 
-from .string import String
+from ..types.string import String
 
 
 SP_OFFSET_VP = 0x00
 SP_OFFSET_COLOR = 0x03
 
-class TextDisplay(String):
+class TextDisplay(Component):
     def __init__(self, dgus, sp_address):
         self._sp = sp_address
         self._dgus = dgus

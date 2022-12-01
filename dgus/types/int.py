@@ -2,18 +2,18 @@
 # Copyright (c) 2022 Petr Kracik
 # Copyright (c) 2022 OctopusLAB
 
-from . import Component
+from . import Type
 from struct import unpack
 
-class Int16(Component):
+class Int16(Type):
     @property
     def value(self):
-        return self._dgus.read_vp_int16(self._addr)
+        return self._dgus.read_vp_int16(self._vp)
 
 
     @value.setter
     def value(self, value):
-        self._dgus.write_vp_int16(self._addr, value)
+        self._dgus.write_vp_int16(self._vp, value)
 
 
     def _on_change(self, data):
