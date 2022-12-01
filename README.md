@@ -8,8 +8,8 @@ from machine import UART
 from dgus import DGUS
 from dgus.components.int import Int16
 
-def component_value(val):
-    print("Got data from component: {}".format(val))
+def component_value(c, val):
+    print("Got data from component {}: {}".format(c, val))
 
 
 tftu = UART(1, 115200, rx=36, tx=4)
