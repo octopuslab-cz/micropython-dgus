@@ -12,4 +12,4 @@ class TextDisplay(Component):
 
 
     def set_color(self, color):
-        self._dgus.write_vp_int16(self._sp + SP_OFFSET_COLOR, color)
+        self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_COLOR, color)
