@@ -4,12 +4,16 @@
 
 class Component:
     SP_OFFSET_VP = 0x00
+    SP_OFFSET_POS_X = 0x01
+    SP_OFFSET_POS_Y = 0x02
     SP_OFFSET_COLOR = 0x03
 
     def __init__(self, dgus, sp_address, component):
         self._sp = sp_address
         self._dgus = dgus
         self._vp = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_VP)
+        self._x = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_POS_X)
+        self._y = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_POS_Y)
         self._component = component(self._dgus, self._vp)
         print("Initialized {} at address 0x{:02x} with VP at 0x{:02x}".format(self.__class__.__name__, self._sp, self._vp))
 
@@ -17,6 +21,23 @@ class Component:
     @property
     def component(self):
         return self._component
+
+
+    @property
+    def position(self):
+        return (self._x, self._y)
+
+
+    @position.setter
+    def position(self, pos):
+        if not self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_POS_X, pos[0]):
+            raise Exception("Error while setting X position")
+
+        if not self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_POS_Y, pos[1]):
+            raise Exception("Error while setting Y position")
+
+        self._x = pos[0]
+        self._y = pos[1]
 
 
     @property
