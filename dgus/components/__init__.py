@@ -24,7 +24,7 @@ class Component:
         if self._component is None:
             raise Exception("Component is not net")
         
-        return self._compoment.value
+        return self._component.value
 
 
     @value.setter
