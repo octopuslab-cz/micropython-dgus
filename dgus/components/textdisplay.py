@@ -20,9 +20,9 @@ class TextDisplay(Component):
 
     @property
     def max_length(self):
-        self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_TEXT_LENGTH)
+        return self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_TEXT_LENGTH)
 
 
-    @max_length
+    @max_length.setter
     def max_length(self, value):
         self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_TEXT_LENGTH, value)
