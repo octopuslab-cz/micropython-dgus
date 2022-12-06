@@ -11,7 +11,7 @@ class ReturnKeyCode(Component):
 
     def __init__(self, dgus, vp_address):
         super().__init__(dgus, None, Word, vp_address)
-        self.component.event_on_change_add(self._on_change)
+        self.element.event_on_change_add(self._on_change)
         self._on_key_press_events = list()
         self._capslock = False
 

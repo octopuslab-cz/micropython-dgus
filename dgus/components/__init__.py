@@ -8,7 +8,7 @@ class Component:
     SP_OFFSET_POS_Y = 0x02
     SP_OFFSET_COLOR = 0x03
 
-    def __init__(self, dgus, sp_address, component, vp_address=None):
+    def __init__(self, dgus, sp_address, element, vp_address=None):
         self._sp = sp_address or 0xFFFF
         self._dgus = dgus
         if vp_address is None:
@@ -20,13 +20,13 @@ class Component:
             self._x = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_POS_X)
             self._y = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_POS_Y)
 
-        self._component = component(self._dgus, self._vp)
+        self._element = element(self._dgus, self._vp)
         print("Initialized {} at address 0x{:02x} with VP at 0x{:02x}".format(self.__class__.__name__, self._sp, self._vp))
 
 
     @property
-    def component(self):
-        return self._component
+    def element(self):
+        return self._element
 
 
     @property
@@ -54,12 +54,12 @@ class Component:
 
     @property
     def value(self):
-        if self._component is None:
-            raise Exception("Component is not net")
+        if self._element is None:
+            raise Exception("Element is not set")
         
-        return self._component.value
+        return self._element.value
 
 
     @value.setter
     def value(self, value):
-        self._component.value = value
+        self._element.value = value
