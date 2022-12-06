@@ -39,6 +39,7 @@ class Type:
     def value(self):
         raise NotImplementedError()
 
+
     def event_on_change_add(self, function):
         self._on_change_events.append(function)
 
