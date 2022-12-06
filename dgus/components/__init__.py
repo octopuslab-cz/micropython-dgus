@@ -24,6 +24,14 @@ class Component:
         print("Initialized {} at address 0x{:02x} with VP at 0x{:02x}".format(self.__class__.__name__, self._sp, self._vp))
 
 
+    def __str__(self):
+        return "Component {} at SP:0x{:02x} VP:0x{:02x}".format(self.__class__.__name__, self._sp, self._vp)
+
+
+    def __repr__(self):
+        return self.__str__()
+
+
     @property
     def element(self):
         return self._element
