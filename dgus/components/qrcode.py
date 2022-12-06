@@ -11,8 +11,8 @@ class QRCode(Component):
     SP_OFFSET_FIX_MODE = 0x05
 
 
-    def __init__(self, dgus, sp_address):
-        super().__init__(dgus, sp_address, String)
+    def __init__(self, dgus, sp_address, vp_address = None):
+        super().__init__(dgus, sp_address, String, vp_address)
 
 
     @property

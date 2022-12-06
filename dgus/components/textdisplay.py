@@ -10,8 +10,8 @@ class TextDisplay(Component):
     SP_OFFSET_TEXT_LENGTH = 0x08
 
 
-    def __init__(self, dgus, sp_address):
-        super().__init__(dgus, sp_address, String)
+    def __init__(self, dgus, sp_address, vp_address = None):
+        super().__init__(dgus, sp_address, String, vp_address)
 
 
     def set_color(self, color):
