@@ -63,3 +63,11 @@ class Component:
     @value.setter
     def value(self, value):
         self._element.value = value
+
+
+    def event_on_change_add(self, function):
+        self._element.event_on_change_add(function)
+
+
+    def event_on_change_remove(self, function):
+        self._element.event_on_change_remove(function)

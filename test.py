@@ -36,7 +36,7 @@ i.event_on_change_add(type_value)
 s = String(tft, 0x1100)
 txt = TextDisplay(tft, 0x2100)
 updown = DataVariablesDisplay(tft, None, 0x1250)
-updown.element.event_on_change_add(component_value)
+updown.event_on_change_add(component_value)
 #qr = QRCode(tft, 0x2300)
 
 txt.value = "Ahoj"
