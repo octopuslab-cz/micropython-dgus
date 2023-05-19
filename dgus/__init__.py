@@ -1,10 +1,10 @@
 # Base driver for DGUS protocol used in DWIN UART TFT displays
-# Copyright (c) 2022 Petr Kracik
-# Copyright (c) 2022 OctopusLAB
+# Copyright (c) 2023 Petr Kracik
+# Copyright (c) 2023 OctopusLAB
 
 from struct import pack, unpack
 
-__version__ = "0.0.1"
+__version__ = "0.0.2-SNAPSHOT"
 __license__ = "MIT"
 __author__ = "Petr Kracik"
 
