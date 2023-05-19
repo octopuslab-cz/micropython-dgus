@@ -1,6 +1,6 @@
 # TFT components
-# Copyright (c) 2022 Petr Kracik
-# Copyright (c) 2022 OctopusLAB
+# Copyright (c) 2023 Petr Kracik
+# Copyright (c) 2023 OctopusLAB
 
 from . import Type
 
@@ -19,4 +19,7 @@ class String(Type):
 
         val += b'\xff\xff'
 
-        self._dgus.write_vp(self._vp, val)
+        # send in chunks
+        for i in range(0, len(val), 220):
+            chunk = val[i:i+220]
+            self._dgus.write_vp(self._vp+(i//2), chunk)
