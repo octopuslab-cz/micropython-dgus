@@ -5,6 +5,8 @@
 from . import Type
 
 class String(Type):
+    MAX_CHUNK_SIZE = 220
+
     @property
     def value(self):
         pass
@@ -19,7 +21,6 @@ class String(Type):
 
         val += b'\xff\xff'
 
-        # send in chunks
-        for i in range(0, len(val), 220):
-            chunk = val[i:i+220]
+        for i in range(0, len(val), self.MAX_CHUNK_SIZE):
+            chunk = val[i:i+self.MAX_CHUNK_SIZE]
             self._dgus.write_vp(self._vp+(i//2), chunk)
