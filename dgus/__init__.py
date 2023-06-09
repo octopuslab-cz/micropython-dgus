@@ -3,6 +3,7 @@
 # Copyright (c) 2023 OctopusLAB
 
 from struct import pack, unpack
+from time import sleep_us
 
 __version__ = "0.0.2-SNAPSHOT"
 __license__ = "MIT"
@@ -54,7 +55,15 @@ class DGUS:
         while not self._uart.any():
             pass
 
-        payload = self._uart.read()
+        payload = b''
+
+        read = self._uart.read()
+        while read:
+            print("Reading")
+            payload += read
+            sleep_us(10000)
+            read = self._uart.read()
+
         data = self._parse_dgus(payload)
 
         if data['command'] != self.READ_VP:
