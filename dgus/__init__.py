@@ -43,7 +43,7 @@ class DGUS:
 
 
     def read_vp(self, address, length = 1):
-        if length < 1 and length > 0x7c:
+        if length < 1 or length > 0x7c:
             raise Exception("Lenght out of range 1..124")
 
         # Flush RX buffer
