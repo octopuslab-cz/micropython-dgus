@@ -9,7 +9,8 @@ class String(Type):
 
     @property
     def value(self):
-        pass
+        val = self._dgus.read_vp(self._vp, 120)
+        return val[:val.index(b'\xff')].decode()
 
 
     @value.setter
