@@ -27,6 +27,9 @@ class DGUS:
 
 
     def _parse_dgus(self, payload):
+        if len(payload) < 7:
+            raise Exception("Unknown payload, it must have atleast 7 bytes")
+
         rh, rlen, rcmd, raddr, rdlen = unpack('>HBBHB', payload[0:7])
 
         if rh != self.HEADER:
