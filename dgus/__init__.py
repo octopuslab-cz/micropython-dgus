@@ -62,7 +62,6 @@ class DGUS:
 
         read = self._uart.read()
         while read:
-            print("Reading")
             payload += read
             sleep_us(10000)
             read = self._uart.read()
