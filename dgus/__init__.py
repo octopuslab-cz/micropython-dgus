@@ -5,7 +5,7 @@
 from struct import pack, unpack
 from time import sleep_us
 
-__version__ = "0.0.2-SNAPSHOT"
+__version__ = "0.0.3-SNAPSHOT"
 __license__ = "MIT"
 __author__ = "Petr Kracik"
 
@@ -24,6 +24,18 @@ class DGUS:
         self._components = []
         if self._crc:
             raise NotImplementedError()
+
+
+    def _read_uart(self):
+        payload = b''
+
+        read = self._uart.read()
+        while read:
+            payload += read
+            sleep_us(10000)
+            read = self._uart.read()
+
+        return payload
 
 
     def _parse_dgus(self, payload):
@@ -58,14 +70,7 @@ class DGUS:
         while not self._uart.any():
             pass
 
-        payload = b''
-
-        read = self._uart.read()
-        while read:
-            payload += read
-            sleep_us(10000)
-            read = self._uart.read()
-
+        payload = self._read_uart()
         data = self._parse_dgus(payload)
 
         if data['command'] != self.READ_VP:
@@ -98,14 +103,16 @@ class DGUS:
         length = len(data)
         length += 3
 
-
         self._uart.write(pack('>HBBH', self.HEADER, length, self.WRITE_VP, address))
         self._uart.write(data)
+        self._uart.flush()
 
+        # Wait until data
         while not self._uart.any():
             pass
 
-        data = self._uart.read()
+        data = self._read_uart()
+
         rh, rlen, rcmd = unpack('>HBB', data[0:4])
 
         if rh != self.HEADER:
@@ -138,7 +145,8 @@ class DGUS:
     def loop(self):
         if not self._uart.any():
             return
-        payload = self._uart.read()
+
+        payload = self._read_uart()
         data = self._parse_dgus(payload)
 
         self._on_recv(data)
