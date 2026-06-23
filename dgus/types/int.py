@@ -5,37 +5,39 @@
 from dgus.types import Type
 from struct import unpack, pack
 
-class Int16(Type):
+class _Int(Type):
     @property
     def value(self):
-        data = self._dgus.read_vp(self._vp, 1)
-        return unpack(">h", data)[0]
+        data = self._dgus.read_vp(self._vp, self._words)
+        return unpack(self._format, data)[0]
 
 
     @value.setter
     def value(self, value):
-        self._dgus.write_vp(pack(">h", value), self._vp, 1)
+        self._dgus.write_vp(self._vp, pack(self._format, value))
 
 
     def _on_change(self, data):
-        val = unpack('>h', data)[0]
+        val = unpack(self._format, data)[0]
         for f in self._on_change_events:
             f(self, val)
 
 
-class UInt16(Type):
-    @property
-    def value(self):
-        data = self._dgus.read_vp(self._vp, 1)
-        return unpack(">H", data)[0]
+class Int16(_Int):
+    _format = ">h"
+    _words = 1
 
 
-    @value.setter
-    def value(self, value):
-        self._dgus.write_vp(pack(">H", value), self._vp, 1)
+class UInt16(_Int):
+    _format = ">H"
+    _words = 1
 
 
-    def _on_change(self, data):
-        val = unpack('>H', data)[0]
-        for f in self._on_change_events:
-            f(self, val)
+class Int32(_Int):
+    _format = ">i"
+    _words = 2
+
+
+class UInt32(_Int):
+    _format = ">I"
+    _words = 2
