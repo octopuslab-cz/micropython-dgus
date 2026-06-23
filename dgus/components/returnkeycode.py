@@ -2,8 +2,8 @@
 # Copyright (c) 2026 Petr Kracik
 # Copyright (c) 2026 OctopusLAB
 
-from . import Component
-from ..types.word import Word
+from dgus.components import Component
+from dgus.types.word import Word
 
 
 class ReturnKeyCode(Component):

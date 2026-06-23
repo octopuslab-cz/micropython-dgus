@@ -2,8 +2,8 @@
 # Copyright (c) 2026 Petr Kracik
 # Copyright (c) 2026 OctopusLAB
 
-from . import Component
-from ..types.string import String
+from dgus.components import Component
+from dgus.types.string import String
 
 
 class TextDisplay(Component):

@@ -2,8 +2,8 @@
 # Copyright (c) 2026 Petr Kracik
 # Copyright (c) 2026 OctopusLAB
 
-from . import Component
-from ..types.int import Int16
+from dgus.components import Component
+from dgus.types.int import Int16
 
 
 class DataVariablesDisplay(Component):

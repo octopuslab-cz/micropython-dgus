@@ -3,8 +3,8 @@
 # Copyright (c) 2026 OctopusLAB
 
 from struct import pack
-from . import Component
-from ..types import Type
+from dgus.components import Component
+from dgus.types import Type
 
 
 class BasicGraphics(Component):

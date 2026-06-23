@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Petr Kracik
 # Copyright (c) 2026 OctopusLAB
 
-from . import Type
+from dgus.types import Type
 
 class Word(Type):
     @property
