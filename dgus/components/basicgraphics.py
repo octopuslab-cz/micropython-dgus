@@ -20,8 +20,8 @@ class BasicGraphics(Component):
     def __init__(self, dgus, sp_address, vp_address = None):
         super().__init__(dgus, sp_address, Type, vp_address)
 
-        self._xe = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_POS_XE)
-        self._ye = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_POS_YE)
+        self._xe = self._read_u16(self._sp + _SP_OFFSET_POS_XE)
+        self._ye = self._read_u16(self._sp + _SP_OFFSET_POS_YE)
 
 
     def draw_pixel(self, x, y, color):
@@ -75,10 +75,10 @@ class BasicGraphics(Component):
         xe = self._x + size[0]
         ye = self._y + size[1]
 
-        if not self._dgus.write_vp_int16(self._sp + _SP_OFFSET_POS_XE, xe):
+        if not self._write_u16(self._sp + _SP_OFFSET_POS_XE, xe):
             raise Exception("Error while setting XE position")
 
-        if not self._dgus.write_vp_int16(self._sp + _SP_OFFSET_POS_YE, ye):
+        if not self._write_u16(self._sp + _SP_OFFSET_POS_YE, ye):
             raise Exception("Error while setting YE position")
 
         self._xe = xe

@@ -3,6 +3,7 @@
 # Copyright (c) 2026 OctopusLAB
 
 from micropython import const
+from struct import pack, unpack
 
 _SP_OFFSET_VP = const(0x00)
 _SP_OFFSET_POS_X = const(0x01)
@@ -15,13 +16,13 @@ class Component:
         self._sp = sp_address or 0xFFFF
         self._dgus = dgus
         if vp_address is None:
-            self._vp = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_VP)
+            self._vp = self._read_u16(self._sp + _SP_OFFSET_VP)
         else:
             self._vp = vp_address
 
         if self._sp != 0xFFFF:
-            self._x = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_POS_X)
-            self._y = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_POS_Y)
+            self._x = self._read_u16(self._sp + _SP_OFFSET_POS_X)
+            self._y = self._read_u16(self._sp + _SP_OFFSET_POS_Y)
 
         self._element = element(self._dgus, self._vp)
         print("Initialized {} at address 0x{:02x} with VP at 0x{:02x}".format(self.__class__.__name__, self._sp, self._vp))
@@ -33,6 +34,16 @@ class Component:
 
     def __repr__(self):
         return self.__str__()
+
+
+    def _read_u16(self, address):
+        data = self._dgus.read_vp(address, 1)
+        return unpack(">H", data)[0]
+
+
+    def _write_u16(self, address, value):
+        data = pack(">H", value)
+        return self._dgus.write_vp(address, data)
 
 
     @property
@@ -53,10 +64,10 @@ class Component:
         if self._sp == 0xFFFF:
             raise Exception("This component does not have SP address")
 
-        if not self._dgus.write_vp_int16(self._sp + _SP_OFFSET_POS_X, pos[0]):
+        if not self._write_u16(self._sp + _SP_OFFSET_POS_X, pos[0]):
             raise Exception("Error while setting X position")
 
-        if not self._dgus.write_vp_int16(self._sp + _SP_OFFSET_POS_Y, pos[1]):
+        if not self._write_u16(self._sp + _SP_OFFSET_POS_Y, pos[1]):
             raise Exception("Error while setting Y position")
 
         self._x = pos[0]

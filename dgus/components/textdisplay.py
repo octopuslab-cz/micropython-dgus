@@ -16,14 +16,14 @@ class TextDisplay(Component):
 
 
     def set_color(self, color):
-        self._dgus.write_vp_int16(self._sp + _SP_OFFSET_COLOR, color)
+        self._write_u16(self._sp + _SP_OFFSET_COLOR, color)
 
 
     @property
     def max_length(self):
-        return self._dgus.read_vp_int16(self._sp + _SP_OFFSET_TEXT_LENGTH)
+        return self._read_u16(self._sp + _SP_OFFSET_TEXT_LENGTH)
 
 
     @max_length.setter
     def max_length(self, value):
-        self._dgus.write_vp_int16(self._sp + _SP_OFFSET_TEXT_LENGTH, value)
+        self._write_u16(self._sp + _SP_OFFSET_TEXT_LENGTH, value)

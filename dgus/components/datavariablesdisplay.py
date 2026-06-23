@@ -12,4 +12,4 @@ class DataVariablesDisplay(Component):
 
 
     def set_color(self, color):
-        self._dgus.write_vp_int16(self._sp + _SP_OFFSET_COLOR, color)
+        self._write_u16(self._sp + _SP_OFFSET_COLOR, color)

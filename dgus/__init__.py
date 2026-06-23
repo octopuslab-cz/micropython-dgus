@@ -83,16 +83,6 @@ class DGUS:
         return data['data']
 
 
-    def read_vp_int16(self, address):
-        data = self.read_vp(address, 1)
-        return unpack(">h", data)[0]
-
-
-    def read_vp_uint16(self, address):
-        data = self.read_vp(address, 1)
-        return unpack(">H", data)[0]
-
-
     def write_vp(self, address, data):
         # Flush RX buffer
         self._uart.read()
@@ -126,16 +116,6 @@ class DGUS:
             raise Exception("Malformed reply, bad reply command")
 
         return data[4:] == b'OK'
-
-
-    def write_vp_int16(self, address, value):
-        data = pack(">H", value)
-        return self.write_vp(address, data)
-
-
-    def write_vp_int32(self, address, value):
-        data = pack(">I", value)
-        return self.write_vp(address, data)
 
 
     def set_page(self, pageid):

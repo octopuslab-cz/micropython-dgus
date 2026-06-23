@@ -18,19 +18,19 @@ class QRCode(Component):
 
     @property
     def unit_pixels(self):
-        return self._dgus.read_vp_int16(self._sp + _SP_OFFSET_UNIT_PIXELS)
+        return self._read_u16(self._sp + _SP_OFFSET_UNIT_PIXELS)
 
 
     @unit_pixels.setter
     def unit_pixels(self, value):
-        self._dgus.write_vp_int16(self._sp + _SP_OFFSET_UNIT_PIXELS, value)
+        self._write_u16(self._sp + _SP_OFFSET_UNIT_PIXELS, value)
 
 
     @property
     def fix_mode(self):
-        return self._dgus.read_vp_int16(self._sp + _SP_OFFSET_FIX_MODE)
+        return self._read_u16(self._sp + _SP_OFFSET_FIX_MODE)
 
 
     @fix_mode.setter
     def fix_mode(self, value):
-        self._dgus.write_vp_int16(self._sp + _SP_OFFSET_FIX_MODE, value)
+        self._write_u16(self._sp + _SP_OFFSET_FIX_MODE, value)
