@@ -60,7 +60,7 @@ autodoc_default_options = {
     'member-order': 'bysource',
     'special-members': '__init__',
     'undoc-members': True,
-    'exclude-members': '__weakref__',
+    'exclude-members': '__weakref__, const, sleep_us',
     'show-inheritance': True,
 }
 
@@ -112,3 +112,13 @@ html_sidebars = {
         'searchbox.html',
     ]
 }
+
+
+def skip_member(app, what, name, obj, skip, options):
+    if what == 'module' and name in ('const', 'sleep_us'):
+        return True
+    return skip
+
+
+def setup(app):
+    app.connect('autodoc-skip-member', skip_member)
