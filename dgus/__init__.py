@@ -1,6 +1,6 @@
 # Base driver for DGUS protocol used in DWIN UART TFT displays
-# Copyright (c) 2023 Petr Kracik
-# Copyright (c) 2023 OctopusLAB
+# Copyright (c) 2026 Petr Kracik
+# Copyright (c) 2026 OctopusLAB
 
 from struct import pack, unpack
 from time import sleep_us

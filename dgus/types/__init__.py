@@ -1,6 +1,6 @@
 # TFT components
-# Copyright (c) 2022 Petr Kracik
-# Copyright (c) 2022 OctopusLAB
+# Copyright (c) 2026 Petr Kracik
+# Copyright (c) 2026 OctopusLAB
 
 class Type:
     def __init__(self, dgus, vp_address):

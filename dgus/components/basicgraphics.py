@@ -1,6 +1,6 @@
 # TFT components
-# Copyright (c) 2022 Petr Kracik
-# Copyright (c) 2022 OctopusLAB
+# Copyright (c) 2026 Petr Kracik
+# Copyright (c) 2026 OctopusLAB
 
 from struct import pack
 from . import Component

@@ -1,6 +1,6 @@
 # Return Key Code component
-# Copyright (c) 2022 Petr Kracik
-# Copyright (c) 2022 OctopusLAB
+# Copyright (c) 2026 Petr Kracik
+# Copyright (c) 2026 OctopusLAB
 
 from . import Component
 from ..types.word import Word
