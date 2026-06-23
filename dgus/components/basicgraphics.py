@@ -3,37 +3,39 @@
 # Copyright (c) 2026 OctopusLAB
 
 from struct import pack
+from micropython import const
 from dgus.components import Component
 from dgus.types import Type
 
 
-class BasicGraphics(Component):
-    SP_OFFSET_POS_XE = 0x03
-    SP_OFFSET_POS_YE = 0x04
-    
-    CMD_DOT = 0x0001
-    CMD_RECT = 0x0003
-    CMD_FILLRECT = 0x0004
+_SP_OFFSET_POS_XE = const(0x03)
+_SP_OFFSET_POS_YE = const(0x04)
 
+_CMD_DOT = const(0x0001)
+_CMD_RECT = const(0x0003)
+_CMD_FILLRECT = const(0x0004)
+
+
+class BasicGraphics(Component):
     def __init__(self, dgus, sp_address, vp_address = None):
         super().__init__(dgus, sp_address, Type, vp_address)
 
-        self._xe = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_POS_XE)
-        self._ye = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_POS_YE)
+        self._xe = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_POS_XE)
+        self._ye = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_POS_YE)
 
 
     def draw_pixel(self, x, y, color):
-        data = pack('>HHHHH', self.CMD_DOT, 1, self._x+x, self._y+y, color)
+        data = pack('>HHHHH', _CMD_DOT, 1, self._x+x, self._y+y, color)
         self._dgus.write_vp(self._vp, data)
 
 
     def draw_rect(self, x, y, w, h, color):
-        data = pack('>HHHHHHHH', self.CMD_RECT, 1, self._x+x, self._y+y, self._x + x + w, self._y + y + h, color, 0xFF00)
+        data = pack('>HHHHHHHH', _CMD_RECT, 1, self._x+x, self._y+y, self._x + x + w, self._y + y + h, color, 0xFF00)
         self._dgus.write_vp(self._vp, data)
 
 
     def fill_rects(self, rects):
-        data = pack('>HH', self.CMD_FILLRECT, len(rects))
+        data = pack('>HH', _CMD_FILLRECT, len(rects))
         for rect in rects:
             data += pack('>HHHHH',
                          self._x+rect['x'],
@@ -73,10 +75,10 @@ class BasicGraphics(Component):
         xe = self._x + size[0]
         ye = self._y + size[1]
 
-        if not self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_POS_XE, xe):
+        if not self._dgus.write_vp_int16(self._sp + _SP_OFFSET_POS_XE, xe):
             raise Exception("Error while setting XE position")
 
-        if not self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_POS_YE, ye):
+        if not self._dgus.write_vp_int16(self._sp + _SP_OFFSET_POS_YE, ye):
             raise Exception("Error while setting YE position")
 
         self._xe = xe

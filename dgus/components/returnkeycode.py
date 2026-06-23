@@ -6,9 +6,10 @@ from dgus.components import Component
 from dgus.types.word import Word
 
 
-class ReturnKeyCode(Component):
-    CAPS_LOCK_KEYCODE = b'\x00\xF4'
+_CAPS_LOCK_KEYCODE = b'\x00\xF4'
 
+
+class ReturnKeyCode(Component):
     def __init__(self, dgus, vp_address):
         super().__init__(dgus, None, Word, vp_address)
         self.element.event_on_change_add(self._on_change)
@@ -17,7 +18,7 @@ class ReturnKeyCode(Component):
 
 
     def _on_change(self, comp, data):
-        if data == self.CAPS_LOCK_KEYCODE:
+        if data == _CAPS_LOCK_KEYCODE:
             self._capslock = not self._capslock
 
         self._on_key_press(data[0] if self._capslock else data[1])

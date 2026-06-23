@@ -4,19 +4,20 @@
 
 from struct import pack, unpack
 from time import sleep_us
+from micropython import const
 
 __version__ = "0.0.3-SNAPSHOT"
 __license__ = "MIT"
 __author__ = "Petr Kracik"
 
 
+_HEADER = const(0x5aa5)
+_WRITE_VP = const(0x82)
+_READ_VP = const(0x83)
+_PAGEID_REG = const(0x5a01)
+
+
 class DGUS:
-    HEADER=0x5aa5
-    WRITE_VP=0x82
-    READ_VP=0x83
-    PAGEID_REG=0x5a01
-
-
     def __init__(self, uart, crc=False):
         self._uart = uart
         self._crc = crc
@@ -44,8 +45,8 @@ class DGUS:
 
         rh, rlen, rcmd, raddr, rdlen = unpack('>HBBHB', payload[0:7])
 
-        if rh != self.HEADER:
-            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, self.HEADER))
+        if rh != _HEADER:
+            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, _HEADER))
 
         if rlen != len(payload) - 3:
             raise Exception("Malformed reply, length does not match")
@@ -65,7 +66,7 @@ class DGUS:
         # Flush RX buffer
         self._uart.read()
 
-        self._uart.write(pack('>HBBHB', self.HEADER, 4, self.READ_VP, address, length))
+        self._uart.write(pack('>HBBHB', _HEADER, 4, _READ_VP, address, length))
 
         while not self._uart.any():
             pass
@@ -73,7 +74,7 @@ class DGUS:
         payload = self._read_uart()
         data = self._parse_dgus(payload)
 
-        if data['command'] != self.READ_VP:
+        if data['command'] != _READ_VP:
             raise Exception("Malformed reply, bad reply command")
 
         if data['address'] != address:
@@ -103,7 +104,7 @@ class DGUS:
         length = len(data)
         length += 3
 
-        self._uart.write(pack('>HBBH', self.HEADER, length, self.WRITE_VP, address))
+        self._uart.write(pack('>HBBH', _HEADER, length, _WRITE_VP, address))
         self._uart.write(data)
         self._uart.flush()
 
@@ -115,13 +116,13 @@ class DGUS:
 
         rh, rlen, rcmd = unpack('>HBB', data[0:4])
 
-        if rh != self.HEADER:
-            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, self.HEADER))
+        if rh != _HEADER:
+            raise Exception("Malformed reply, HEADER mismatch {} != {}".format(rh, _HEADER))
 
         if rlen != len(data) - 3:
             raise Exception("Malformed reply, length does not match")
 
-        if rcmd != self.WRITE_VP:
+        if rcmd != _WRITE_VP:
             raise Exception("Malformed reply, bad reply command")
 
         return data[4:] == b'OK'
@@ -138,7 +139,7 @@ class DGUS:
 
 
     def set_page(self, pageid):
-        payload = pack('>HH', self.PAGEID_REG, pageid)
+        payload = pack('>HH', _PAGEID_REG, pageid)
         self.write_vp(0x84, payload)
 
 

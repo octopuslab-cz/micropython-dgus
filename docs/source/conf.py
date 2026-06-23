@@ -5,11 +5,16 @@
 
 import os
 import sys
+import types
 sys.path.insert(0, os.path.abspath('../..'))
 
 import time
 if not hasattr(time, 'sleep_us'):
     time.sleep_us = lambda us: None
+
+micropython = types.ModuleType('micropython')
+micropython.const = lambda value: value
+sys.modules.setdefault('micropython', micropython)
 
 from dgus import __version__ as package_version
 
@@ -70,7 +75,7 @@ autosummary_generate = True
 autosummary_imported_members = False
 
 # Mock imports for MicroPython modules (not available in CPython) and platform-specific modules
-autodoc_mock_imports = ['machine', 'micropython', 'utime']
+autodoc_mock_imports = ['machine', 'utime']
 
 templates_path = ['_templates']
 exclude_patterns = []

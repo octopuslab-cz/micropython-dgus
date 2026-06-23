@@ -2,27 +2,28 @@
 # Copyright (c) 2026 Petr Kracik
 # Copyright (c) 2026 OctopusLAB
 
-from dgus.components import Component
+from micropython import const
+from dgus.components import Component, _SP_OFFSET_COLOR
 from dgus.types.string import String
 
 
+_SP_OFFSET_TEXT_LENGTH = const(0x08)
+
+
 class TextDisplay(Component):
-    SP_OFFSET_TEXT_LENGTH = 0x08
-
-
     def __init__(self, dgus, sp_address, vp_address = None):
         super().__init__(dgus, sp_address, String, vp_address)
 
 
     def set_color(self, color):
-        self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_COLOR, color)
+        self._dgus.write_vp_int16(self._sp + _SP_OFFSET_COLOR, color)
 
 
     @property
     def max_length(self):
-        return self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_TEXT_LENGTH)
+        return self._dgus.read_vp_int16(self._sp + _SP_OFFSET_TEXT_LENGTH)
 
 
     @max_length.setter
     def max_length(self, value):
-        self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_TEXT_LENGTH, value)
+        self._dgus.write_vp_int16(self._sp + _SP_OFFSET_TEXT_LENGTH, value)

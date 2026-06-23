@@ -2,23 +2,26 @@
 # Copyright (c) 2026 Petr Kracik
 # Copyright (c) 2026 OctopusLAB
 
-class Component:
-    SP_OFFSET_VP = 0x00
-    SP_OFFSET_POS_X = 0x01
-    SP_OFFSET_POS_Y = 0x02
-    SP_OFFSET_COLOR = 0x03
+from micropython import const
 
+_SP_OFFSET_VP = const(0x00)
+_SP_OFFSET_POS_X = const(0x01)
+_SP_OFFSET_POS_Y = const(0x02)
+_SP_OFFSET_COLOR = const(0x03)
+
+
+class Component:
     def __init__(self, dgus, sp_address, element, vp_address=None):
         self._sp = sp_address or 0xFFFF
         self._dgus = dgus
         if vp_address is None:
-            self._vp = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_VP)
+            self._vp = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_VP)
         else:
             self._vp = vp_address
 
         if self._sp != 0xFFFF:
-            self._x = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_POS_X)
-            self._y = self._dgus.read_vp_int16(self._sp + self.SP_OFFSET_POS_Y)
+            self._x = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_POS_X)
+            self._y = self._dgus.read_vp_int16(self._sp + _SP_OFFSET_POS_Y)
 
         self._element = element(self._dgus, self._vp)
         print("Initialized {} at address 0x{:02x} with VP at 0x{:02x}".format(self.__class__.__name__, self._sp, self._vp))
@@ -50,10 +53,10 @@ class Component:
         if self._sp == 0xFFFF:
             raise Exception("This component does not have SP address")
 
-        if not self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_POS_X, pos[0]):
+        if not self._dgus.write_vp_int16(self._sp + _SP_OFFSET_POS_X, pos[0]):
             raise Exception("Error while setting X position")
 
-        if not self._dgus.write_vp_int16(self._sp + self.SP_OFFSET_POS_Y, pos[1]):
+        if not self._dgus.write_vp_int16(self._sp + _SP_OFFSET_POS_Y, pos[1]):
             raise Exception("Error while setting Y position")
 
         self._x = pos[0]
